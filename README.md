@@ -148,10 +148,66 @@ print('-----')
 ```
 The current cryptocurrency wallet balance is $61071.05.
 
+Our next step is to make an API call using the Alpaca SDK. The Alpaca SDK requires that we create a REST object that holds and stores our API keys. Once this REST object is created, we will use the Alpaca get_barset function to make an API call and recieve a payload (JSON). From there we will further analyze this member's portfolio. (Please note: snippets of code have been intentionally removed from the README.md file due to its length. Refer to main source code for entire application code.)
 
+```
+spy_shares = 110
+agg_shares = 200
 
+# Set the variables for the Alpaca API and secret keys
+alpaca_api_key = os.getenv('ALPACA_API_KEY_ENV')
+alpaca_secret_key = os.getenv('ALPACA_SECRET_KEY_ENV')
 
+# Create the Alpaca tradeapi.REST object
+alpaca = tradeapi.REST(
+    alpaca_api_key,
+    alpaca_secret_key,
+    api_version="v2"
+)
 
+# Use the Alpaca get_barset function to get current closing prices the portfolio
+# Be sure to set the `df` property after the function to format the response object as a DataFrame
+stock_portfolio_df = alpaca.get_barset(
+    tickers,
+    timeframe,
+    start = start_date,
+    end = end_date,
+    limit = 1000
+).df
+
+# Review the first 5 rows of the Alpaca DataFrame
+stock_portfolio_df.head()
+```
+![image](https://user-images.githubusercontent.com/96163075/152094363-6bcedd10-cf7e-4a91-8663-75d08dfe2b2e.png)
+```
+# Calculate the total value of the member's entire savings portfolio
+# Add the value of the cryptocurrency walled to the value of the total stocks and bonds
+total_portfolio = total_stocks_bonds+total_crypto_wallet
+
+# Print current cryptocurrency wallet balance
+print(f"The total value of this member's entire savings portfolio is ${total_portfolio:.2f}.")
+```
+
+The total value of this member's entire savings portfolio is $132044.25.
+
+Finally, to determine if this individual has enough savings for an emergency fund, we can set emergency_fund_value equal to their monthly income times 3 and generate an if-else statement. In this case, this member has enough funds for an emergency fund!
+
+```
+emergency_fund_value = monthly_income*3
+# Evaluate the possibility of creating an emergency fund with 3 conditions:
+if total_portfolio > emergency_fund_value:
+    print(f"Congratulations! You have enough money in this fund for emergency purposes.")
+    print('-----')
+elif total_portfolio == emergency_fund_value:
+    print(f"Congratulations on acheving this important financial goal of saving enough money for emergency purposes!")
+    print('-----')
+else:
+    print(f"You currently need an additional ${(emergency_fund_value - total_portfolio):.2f} in your portfolio to have a healthy emergency savings fund.")
+    print('-----')
+```
+
+## Part 2: Create a Financial Planner for Retirement
+(Please review main source code file for entirety of application code.)
 
 
 
