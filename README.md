@@ -74,8 +74,6 @@ In this portion of code, we will determine the individual's current value of the
 load_dotenv()
 btc_coins = 1.2
 eth_coins = 5.3
-btc_coins = 1.2
-eth_coins = 5.3
 monthly_income = 12000
 
 btc_url = "https://api.alternative.me/v2/ticker/Bitcoin/?convert=USD"
