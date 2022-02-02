@@ -208,23 +208,86 @@ else:
 
 ## Part 2: Create a Financial Planner for Retirement
 (Please review main source code file for entirety of application code.)
+In this portion of the application, we will create a Monte Carlo Simulation to project the member's savings portfolio over 30-years. We will make an API call using the Alpaca SDK to get 3 years of historical data and run a Monte Carlo Simulation using a 60% stocks (SPY) and 40% bonds (AGG) split.
+```
+# Set start and end dates of 3 years back from your current date
+# Alternatively, you can use an end date of 2020-08-07 and work 3 years back from that date 
+start_date = pd.Timestamp('2019-01-31', tz='America/New_York').isoformat()
+end_date = pd.Timestamp('2022-01-31', tz='America/New_York').isoformat()
 
+# Set number of rows to 1000 to retrieve the maximum amount of rows
+limit_rows = 1000
 
+stock_portfolio_df = alpaca.get_barset(
+    tickers,
+    timeframe,
+    start = start_date,
+    end = end_date,
+    limit = limit_rows
+).df
 
+print(stock_portfolio_df.head())
+stock_portfolio_df.tail()
+```
+![image](https://user-images.githubusercontent.com/96163075/152095371-3a795ccc-9fea-4499-8b77-bf698f9ecfd5.png)
 
+```
+MC_30year = MCSimulation(
+    portfolio_data = stock_portfolio_df,
+    weights = [0.40,0.60],
+    num_simulation = 500,
+    num_trading_days = 252*30
+)
 
+MC_30year.calc_cumulative_return()
 
+MC_30year_sim_line_plot = MC_30year.plot_simulation()
+MC_30year_sim_dist_plot = MC_30year.plot_distribution()
+MC_30year_summary_statistics = MC_30year.summarize_cumulative_return()
+```
+---
 
+### Final Analysis
+Based on the following plots generated below we can determine that with a 95% certainty, the lower and upper bounds for the expected value of the portfolio is $400,976.94 and $8,197,422.95. Not a bad 30-year retirement portfolio! If you look at the distribution chart and summary statistics, at the 50% interval comes with a mean return of roughly 30x the initial investment which is more likely.
+![image](https://user-images.githubusercontent.com/96163075/152095553-2e12d933-b7bb-4c31-9347-dd53afd06cf6.png)
+![image](https://user-images.githubusercontent.com/96163075/152095577-97be69f1-f381-406c-aefd-95af27d2f38e.png)
+![image](https://user-images.githubusercontent.com/96163075/152095623-e32eb88d-042c-4e54-85c6-e1461c4ec211.png)
 
+---
 
+## Contributors
 
+David Lee Ping
 
+email: davidleeping@gmail.com
 
+Phone: 570.269.5973
 
+LinkedIn: https://www.linkedin.com/in/david-lee-ping/
 
+---
 
+## License
 
+MIT License
 
+Copyright (c) [2022] [David Lee Ping]
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
