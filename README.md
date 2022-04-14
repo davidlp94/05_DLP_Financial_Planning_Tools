@@ -6,6 +6,8 @@ This application involves communicating to (2) different API endpoints (Alpaca S
 
 Please note: This application involves the set up of a .env file stored in your directory when git cloned. This .env file should have variables associated with YOUR API keys.
 
+Live application link: https://github.com/davidlp94/05_DLP_Financial_Planning_Tools/blob/main/financial_planning_tools.ipynb
+
 ---
 
 ## Technologies
